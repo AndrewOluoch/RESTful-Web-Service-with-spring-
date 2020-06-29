@@ -1,0 +1,349 @@
+{Building RESTful Web Services with Maven and Gradle}
+
+• Hibernate: This is a standard dependency that Maven will automatically
+fetch before compiling the project
+
+• JUnit: With this dependency, Maven will alter the classpath used to compile
+and execute the unit tests
+
+Gradle offers dependency resolution. It can be set up to use Maven's Central
+Repository.
+
+Request mapping-
+The @org.springframework.web.bind.annotation.RequestMapping annotation
+provides the glue for mapping incoming requests to classes and methods within
+the code.
+
+Path mapping-
+Allows routing requests for a specific path to a resource
+(or controller) class
+
+HTTP method mapping-
+It is possible to map specific HTTP methods to classes or Java methods. Our
+RoomsResource class exposes a method for retrieving a Room by identifier. It is
+declared as follows:
+@RequestMapping(value = "/{roomId}", method = RequestMethod.GET)
+
+RequestParam parameter provides the means to map an HTTP query parameter
+to a Java method attribute.
+
+mamvens multi modle project-
+A multi-module project is built from an aggregator POM that manages a group of 
+submodules. In most cases, the aggregator is located in the project's root 
+directory and must have packaging of type pom. Now, the submodules are regular 
+Maven projects, and they can be built separately or through the aggregator POM.
+
+{The First Endpoint ch.3}-
+• The Inventory component of our sample web service
+• Spring constructs to build RESTful endpoints
+• Running our first endpoint
+• A brief discussion on data presentation
+
+cascade-means that if operation X is called on an instance using the EntityManager
+ interface, and that instance has references to other entity instances, and that 
+ association has CascadeType.X defined, then the EntityManager operation will also 
+ be applied to that associated entity.
+
+persist-used to specify that if an entity is persisted then all its associated 
+child entities will also be persisted
+
+refresh-When we refresh an entity all the entities held in this field refresh too
+
+fetch,eager/lazy-To load it together with the rest of the fields (i.e. eagerly), or
+To load it on-demand (i.e. lazily) when you call the university's getStudents() method.
+
+
+{Data Representation ch.4}-
+• The Data-Transfer-Object design pattern
+• Controlling the responses format in JSON
+• formatting responses
+• API evolutions
+
+A DTO is a server-side value object which stores data using
+the presentation layer representation. We separate DTOs into
+those received by the server (Request), and those returned 
+by the server (Response). They are automatically 
+serialised/deserialised by Spring.
+
+-typically define no business logic, and simply fulfill the role of a data
+container
+
+Error handling- Since most RESTful web services are accessed over HTTP/HTTPS, we can
+leverage HTTP status codes to categorize errors and provide clues as to what is
+wrong with a request.
+
+- can modify our suggested envelope format
+to include an error property
+
+{CRUD Operations in REST ch.5}-
+• Mapping CRUD operations to HTTP methods
+• Creating resources
+• Updating resources
+• Deleting resources
+• Testing RESTful operations
+• Emulating PUT and DELETE methods
+
+TRACE: This method is used to perform actions on web servers. These actions
+are often aimed at aiding the development and testing of HTTP applications.
+TRACE requests aren't usually mapped to any particular RESTful operations.
+
+CONNECT: This HTTP method is defined to support HTTP tunneling through
+a proxy server. Since it deals with transport layer concerns, this method has
+no natural semantic mapping to RESTful operations.
+
+By default, Spring will use the Java method attribute names to
+map incoming form inputs. Developers can change this behavior
+by annotating an attribute with @RequestParam("…") to
+specify the input name.
+
+{Preformance ch.6}-
+• Using HTTP compression
+• Using HTTP Cache-Control 
+• Using HTTP ETag headers
+• Using HTTP Last-Modified/If-Modified-Since headers
+
+
+HTTP compression-
+Comprises of content negotiation between server and client. Client notifies
+server about what compression algorithms it supports, typically deflate/gzip.
+
+Cache-Control-
+These directives define who can
+cache responses, under which conditions, and for how long.
+
+Private/Public caching
+set the appropriate value in the Cache-Control header.
+
+Public- indicates that the response may be cached by any intermediate cache
+it alsoimplies that content that is normally non-cacheable.
+
+Private- can be cached by web browsers, but they
+are typically only relevant to single users, intermediates do not
+cache the content.
+
+To specify how long the content should be cached, the max-age directive can be
+specified.
+
+ETags-
+When clients need to re-issue a new request for a cached response, they can include
+the ETag in the form of an If-None-Match header.s provide a mechanism for validating 
+cached responses.
+-When generating a last modified date is not suitable, ETags can be used
+instead.
+
+Last-Modified/If-Modified-Since headers-
+allows clients to validate the state of cached responses
+
+
+{Security-ch.7}
+• Authentication techniques
+• Authorization techniques
+• Input validation
+• The use of encryption
+
+
+https://slack-redir.net/link?url=https%3A%2F%2Fwww.digitalocean.com%2Fcommunity%2Ftutorials%2Fan-introduction-to-oauth-2
+
+OAuth2: used for delegated permissions & Authorization  an open source standard of authorization that provides
+client applications with secure access to server resources on behalf of users
+
+JWT: JSON Web Token is a simple mechanism used to check whether
+information sent in requests can be verified and trusted using a digital
+signature.
+
+
+HTTP Basic Authentication-
+relies on ausername and password combination being passed as an 
+Authorization header to any HTTP request that mandates authentication.
+-Returns a HTTP 401 Not Authorized response if a request is issued without authentication
+
+HTTP Digest Authentication-
+also uses a username and password to authenticate users
+Instead of sending username and password, an MD5 hash of the username, 
+password, and a few extra pieces of information are sent  over the network.
+
+Token-based Authentication-
+Is not part of the HTTP specification, relies on an encrypted token being issued by the 
+server and subsequently sent over on every request by the client. Can be encrypted using modern,
+robust encryption algorithms.
+
+
+Two approaches to manage authorization with Spring:
+• URL mapping
+• Resource annotations
+
+Input validation-
+One area of importance in building secure web services is to ensure that inputs are always validated.
+prevents security vulnerabilities such as a SQL injection.
+
+To implement input validation, we can use Java Bean validation annotations.
+
+@javax.validation.constraints, allows the validation of fields, based on regular
+expressions.
+
+
+Encryption-
+Most common form used is HTTPS,wich encrypts the content of requests and responses so that they
+appear unintelligeble to anyone listening on the network.
+
+Another point of encryption that is essential is in the persistence layer
+it's good practice to encrypt passwords in the database.
+
+
+{Testing RESTful Web Services ch.8}-
+• Unit testing Spring controllers
+• Mocking
+• Testing security
+• Integration strategies
+• Other forms of testing to consider
+
+
+The de facto unit testing library for Java is JUnit
+
+Mock objects is a unit testing technique in which a code chunk is replaced by dummy implementations
+that emulate real code.
+
+Mocking Libraries-
+jMock
+EasyMock
+Mockito
+
+Unit testing helps with ensuring correct behavior is exhibited by the
+individual classes
+
+Integration testing-
+Focuses on the interaction between the different
+components of a system.
+
+Continuous delivery-
+Is a software engineering practice that advocates the production
+of software in short cycles that can be reliably released. 
+
+With Maven, we can define a simple means to separate unit tests from integration
+tests by their naming conventions. Depending on the configuration unit tests can be run first 
+and integration tests can be run once the software has been deployed to a staging environment.
+
+Deployments occur very frequently throughout the lifetime of a software
+project. It is, therefore, a very good investment to spend time automating
+the deployment process. It will save the developer's time and facilitate
+continuous delivery.
+
+Spring Boot offers good support for integration testing using handy annotations
+@IntegrationTest("integration_server:9000")
+
+Postman offers the ability to define collections of tests
+In its free version, Postman does not offer complete support for testing.
+Developers must obtain a license to add assertions to their calls
+
+User Acceptance Testing (UAT) looks at testing from a user's point of view
+UAT tends to be less automated than othertypes of testing. However, UAT test 
+managers should ultimately have the final say in
+whether a software solution is ready for general availability
+
+
+Load testing-
+Its important to mesure the production readiness of a RESTful web service to preform in line
+with  Service Level Agreements (SLAs) under load
+With JMeter, developers can create test plans
+that can be executed at defined rates and capture response times.
+
+Simulating real production load is not easy to achieve. Therefore, service
+designers may see discrepancies between performance under simulated
+load and real load. This fact does not take away the value of load testing.
+It merely suggests that service designers should not rely solely on load
+testing results to ensure that SLAs are met.
+
+{Building a REST Client ch.9}-
+• The basic setup for building a RESTful service client with Spring
+• Invoking service endpoints
+• Remote versus local clients
+• Handling security
+• Exception handling
+
+By using interfaces as an added level of abstraction we can substitute a remote 
+implementation for a local one and avoid  unnecessary network latency from using two components
+with the same JVM.
+
+HTTP public key pinning-
+(HPKP) is a Trust on First Use security technique that
+prevents impersonations of fraudulent SSL certificates
+By passing a request factory to our template, we are able to leverage HttpClient
+to manage the Digest authentication.
+
+
+Clients consuming a RESTful web service with such exception handling will have
+a consistent way to manage and report errors.
+
+
+The decision of using checked or unchecked exceptions is often more of a
+personal preference than a technically motivated choice. Being required
+to catch an exception on every method of a client library might prove
+rather cumbersome. Equally, not having to catch exceptions might lead
+consumers to not handle error situations that they could, otherwise,
+recover from.
+
+
+{Scaling a RESTful Web Service CH.10}-
+ The benefits of clustering
+• Load balancing
+• Distributed caching
+• Asynchronous communications
+
+
+By scaling up or down you can better deal with increased traffic. Scaliing is limited 
+by servers physical limitations. Often used in data tiers, scaling up the persistence
+infrastructure often allows you to avoid extra complexities of database sharding.
+
+Clustering-
+Instead of having one server handling all the traffic, a clustered infrastructure will rely
+on multiple servers, each handling only a fraction of the incoming traffic.
+a cluster should be provisioned to cater for the loss of at least one node.
+
+Since multiple servers form a cluster, it is possible to
+perform maintenance operations, such as restarts or deployments, without
+downtime.
+
+If a system is stateless, then clustering is straightforward. If
+the system is stateful, however, some form of state sharing must be devised, and the
+complexity of clustering significantly increases
+
+Load balancing-
+Using a variety of algorithms (for example, round robin or
+least connection), a load balancer component distributes incoming requests to
+multiple backend servers for processing.
+
+Load-balancing solutions typically offer a form of clustering for High
+Availability purposes. The load-balancing infrastructure is the entry point
+of the entire system and must not become a single point of failure. 
+
+
+Linear scalability refers to the idea that adding nodes to a cluster will increase the
+capacity at a constant rate. In other words, linear scalability implies that cluster
+management overheads are negligible.
+
+In large deployments,this coordination could lead to network saturation.
+
+performance bottlenecks can move down to the data-tier
+
+Data-tier caching-
+Service designers can choose to add a caching layer on top of the database.
+Common strategy for improving "read" throughput.
+
+Hibernate database-
+first lvl caching, in memory cach that requires no specific setup.
+
+Second lvl caching,optional and fully configurable. Multiple providers are supported such as
+Ehcache,OSCache,JBoss Cache
+
+Application-tier caching-
+The result of timeconsuming computations could be stored in a cache such as
+Memcached, Redis,Hazelcast,Ehcache,Riak,Aerospike.
+
+Which solution you should choose depends on many factors such as performance
+requirements, data integrity, fault tolerance, and cost
+
+Asynchronous communication-
+is a form of communication where a measurable amount of time passes between
+a request being issued and the availability of the response
+Database polling,Message Oriented Middleware,RabbitMq
+
